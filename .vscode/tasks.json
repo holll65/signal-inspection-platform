@@ -1,0 +1,32 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "PlatformIO Build",
+      "type": "shell",
+      "command": "pio run",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "PlatformIO Upload",
+      "type": "shell",
+      "command": "pio run -t upload",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Make Build",
+      "type": "shell",
+      "command": "make",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Make Clean",
+      "type": "shell",
+      "command": "make clean",
+      "problemMatcher": []
+    }
+  ]
+}

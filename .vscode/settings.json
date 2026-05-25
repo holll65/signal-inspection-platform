@@ -1,0 +1,9 @@
+{
+  "files.encoding": "gb2312",
+  "files.autoGuessEncoding": true,
+  "C_Cpp.default.configurationProvider": "platformio.platformio-ide",
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "terminal.integrated.defaultProfile.windows": "Command Prompt",
+  "idf.currentSetup": "C:\\esp\\v6.0\\esp-idf"
+}
