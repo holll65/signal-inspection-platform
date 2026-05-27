@@ -55,7 +55,7 @@ SECTIONS
   } >FLASH
 
   _etext = .;
-
+  _sidata = _etext;
   .data : AT(_etext)
   {
     _sdata = .;

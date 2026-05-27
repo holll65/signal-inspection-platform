@@ -1,4 +1,6 @@
+#include "stm32f10x.h"
 #include "config_relay.h"
+#include "config_delay.h"
 
 void GPIO_relay_Config(void)
 {
@@ -13,29 +15,50 @@ void GPIO_relay_Config(void)
         ENABLE
     );
 
-    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
+    RCC_APB2PeriphClockCmd(
+        RCC_APB2Periph_AFIO |
+        RCC_APB2Periph_GPIOB,
+        ENABLE
+    );
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Pin =
+        GPIO_Pin_6 |
+        GPIO_Pin_7 |
+        GPIO_Pin_8 |
+        GPIO_Pin_9;
+
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
+
+    // 你的MOS电路：高电平 = 关闭，低电平 = 导通
+    // 所以上电初始化后先全部关闭
+    GPIO_SetBits(GPIOB,
+        GPIO_Pin_6 |
+        GPIO_Pin_7 |
+        GPIO_Pin_8 |
+        GPIO_Pin_9);
+
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
+    PWR_BackupAccessCmd(ENABLE);
+
+    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOC, &GPIO_InitStructure);
-
-    // 锟斤拷锟斤拷锟斤拷
-    GPIO_SetBits(GPIOC, GPIO_Pin_12 | GPIO_Pin_13);
+    GPIO_ResetBits(GPIOC, GPIO_Pin_12 | GPIO_Pin_13);
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_15;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOA, &GPIO_InitStructure);
-
-    // 锟斤拷锟斤拷锟斤拷
-    GPIO_SetBits(GPIOA, GPIO_Pin_15);
+    GPIO_ResetBits(GPIOA, GPIO_Pin_15);
 
     GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOD, &GPIO_InitStructure);
-
-    // 锟斤拷锟斤拷锟斤拷
-    GPIO_SetBits(GPIOD, GPIO_Pin_2);
+    GPIO_ResetBits(GPIOD, GPIO_Pin_2);
 }

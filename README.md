@@ -68,3 +68,9 @@ make clean
 - `config_rs485.c` 用于压力采集，内部已放 Modbus CRC 框架。
 - `config_TJC.c` 用于陶晶驰串口屏命令发送。
 - 实际项目需要根据压力传感器寄存器地址修改 `RS485_ReadPressure()`。
+git提交
+git add .
+git commit -m "主控板初始化"
+git push
+git将代码同步到本地
+git pull
