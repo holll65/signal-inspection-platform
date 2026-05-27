@@ -1,43 +1,39 @@
   #include "stm32f10x.h"
 #include "config_relay.h"
 #include "config_delay.h"
+#include "config_opt.h"
+#include "config_mos.h"
 //˵��
 
  int main(void)
 	 { 
-		 u16 key_state;	
 	
-    GPIO_relay_Config();
+		GPIO_relay_Config();
+		GPIO_MOS_Config();
+	    GPIO_OPT_Config();
       
-		 while(1)
-		 { 
+		while(1)
+		 	{ 
 			 
 				
-			//  key_state = GPIO_ReadInputData(GPIOB) & (GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15);
-			// 	switch(key_state)
-			// 	{
-				
-			// 	case (GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15):
-			// 								   relay1 =!relay1 ;
-			// 									 Delay_ms(200);
-			// 	break;	
-			// 	case (GPIO_Pin_12 | GPIO_Pin_14 | GPIO_Pin_15):
-			// 								   relay2 =!relay2 ;
-			// 									 Delay_ms(200);
-			// 	break;	
-			// 	case (GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_15):
-			// 								   relay3 =!relay3 ;
-			// 									 Delay_ms(200);
-			// 	break;	
-			// 	case (GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14):
-			// 								   relay4 =!relay4 ;
-			// 									 Delay_ms(200);
-			// 	break;					
-			// 	default:	break;
-			// 	}
-				
+				if(X1==0)
+					{
+    					 relay1 = 1;
+					}
+				else
+					{
+    					relay1 = 0;
+					}
+				if(X2==0)
+					{
+						 relay2 = 1;
+					}
+				else
+					{
+    					relay2 = 0;
+					}
 
-		 }
+		 	}
 	 }
 
 	 
