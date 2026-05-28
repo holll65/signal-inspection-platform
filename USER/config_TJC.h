@@ -5,11 +5,12 @@
 #include <stdint.h>
 
 void TJC_Init(uint32_t baud);
+
+void TJC_SendEnd(void);
 void TJC_SendCmd(const char *cmd);
-void TJC_SetText(const char *obj, const char *txt);
-void TJC_SetNumber(const char *obj, int value);
-void TJC_UpdatePressure(float pressure_kpa);
-void TJC_AddDataRecord(float pressure_kpa, uint8_t pass);
-void TJC_AddAlarm(const char *reason, const char *state);
+void TJCPrintf(const char *fmt, ...);
+
+void TJC_SetSystemState(uint8_t system_ok);
+void TJC_SetProductResult(uint8_t product_ok);
 
 #endif
