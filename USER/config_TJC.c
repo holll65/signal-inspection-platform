@@ -5,6 +5,9 @@
 #include <string.h>
 
 #define TJC_BUF_SIZE 100
+volatile uint8_t  rx_buffer[256];
+volatile uint16_t rx_head = 0;
+volatile uint16_t rx_tail = 0;
 
 void TJC_Init(uint32_t baud)
 {
@@ -126,4 +129,53 @@ uint32_t TJC_ReadNumber(const char *cmd)
     }
 
     return 0;
+}
+
+uint8_t TJC_GetDateTime(char *datetime)
+{
+    uint8_t ch;
+    uint16_t index = 0;
+    uint8_t ff_count = 0;
+
+    memset(datetime, 0, 32);
+
+    /* 清空接收缓冲 */
+    rx_head = 0;
+    rx_tail = 0;
+
+    /* 读取屏RTC字符串 */
+    TJC_SendCmd("get main.tRtc.txt");
+
+    while(1)
+    {
+        if(RS232_ReadByte(&ch))
+        {
+            /* 字符串返回头 */
+            if(ch == 0x70)
+            {
+                continue;
+            }
+
+            /* 结束符 */
+            if(ch == 0xFF)
+            {
+                ff_count++;
+
+                if(ff_count >= 3)
+                {
+                    datetime[index] = 0;
+                    return 1;
+                }
+            }
+            else
+            {
+                ff_count = 0;
+
+                if(index < 31)
+                {
+                    datetime[index++] = ch;
+                }
+            }
+        }
+    }
 }
