@@ -79,3 +79,51 @@ void TJC_SetProductResult(uint8_t result)
 
     TJCPrintf("result.val=%d", result);
 }
+// void TJC_SetMainT0(const char *txt)
+// {
+//     TJCPrintf("main.t0.txt=\"%s\"", txt);
+// }
+uint32_t TJC_ReadNumber(const char *cmd)
+{
+    uint8_t ch;
+    uint8_t buf[4];
+    uint8_t index = 0;
+    uint8_t ff_count = 0;
+
+    TJC_SendCmd(cmd);
+
+    while(1)
+    {
+        if(RS232_ReadByte(&ch))
+        {
+            if(ch == 0x71)
+            {
+                index = 0;
+
+                while(index < 4)
+                {
+                    if(RS232_ReadByte(&buf[index]))
+                    {
+                        index++;
+                    }
+                }
+
+                return (uint32_t)buf[0]
+                     | ((uint32_t)buf[1] << 8)
+                     | ((uint32_t)buf[2] << 16)
+                     | ((uint32_t)buf[3] << 24);
+            }
+
+            if(ch == 0xFF)
+            {
+                ff_count++;
+                if(ff_count >= 3)
+                {
+                    break;
+                }
+            }
+        }
+    }
+
+    return 0;
+}

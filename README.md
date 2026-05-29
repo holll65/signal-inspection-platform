@@ -70,7 +70,7 @@ make clean
 - 实际项目需要根据压力传感器寄存器地址修改 `RS485_ReadPressure()`。
 git提交
 git add .
-git commit -m "实现继光耦输入控制继电器"
+git commit -m "与陶晶驰屏测试程序完成"
 git push
 git将代码同步到本地
 git pull

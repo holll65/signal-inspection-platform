@@ -12,5 +12,6 @@ void TJCPrintf(const char *fmt, ...);
 
 void TJC_SetSystemState(uint8_t system_ok);
 void TJC_SetProductResult(uint8_t product_ok);
+uint32_t TJC_ReadNumber(const char *cmd);
 
-#endif
+#endif  
