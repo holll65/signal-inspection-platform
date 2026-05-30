@@ -136,12 +136,12 @@ int main(void)
         /******** 6. Write pass/fail log once only ********/
         if(product_result == 1 && log_written == 0)
         {
-            TJC_AddDataLog(pressure_value, "�ϸ�");
+            TJC_AddDataLog(pressure_value, "合格");
             log_written = 1;
         }
         else if(product_result == 2 && log_written == 0)
         {
-            TJC_AddDataLog(pressure_value, "���ϸ�");
+            TJC_AddDataLog(pressure_value, "不合格");
             log_written = 1;
         }
 
