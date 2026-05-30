@@ -6,15 +6,15 @@
 #include "config_TJC.h"
 #include <stdlib.h>
 #include "config_protocol.h"
-/******** 压力模拟参数 ********/
+/******** Pressure simulation range ********/
 #define PRESSURE_MIN   0
 #define PRESSURE_MAX   630
 #define PRESSURE_INIT  300
 
 
 /************************************************
-函数: TJC_SendPressure
-功能: 发送压力值和曲线
+Function: TJC_SendPressure
+Purpose : Send pressure value to the screen
 *************************************************/
 void TJC_SendPressure(uint16_t pressure_value)
 {
@@ -37,6 +37,9 @@ int main(void)
     uint16_t pressure_value = 0;
     uint16_t pressure_time = 0;
     uint16_t pressure_send_time = 0;
+    
+    
+    uint8_t log_written = 0;
 
     Delay_Init();
     GPIO_relay_Config();
@@ -53,7 +56,7 @@ int main(void)
 
     while(1)
     {
-        /******** 1. 每1秒更新一次压力值 ********/
+        /******** 1. Update pressure once per second ********/
         pressure_send_time += 50;
 
         if(pressure_send_time >= 1000)
@@ -66,7 +69,7 @@ int main(void)
            //TJCPrintf("add s0.id,0,62");
         }
 
-        /******** 2. 压力判断：压力>0持续1秒 ********/
+        /******** 2. If pressure stays above 0 for 1 second, system is ready ********/
         if(pressure_value > 0)
         {
             if(pressure_time < 1000)
@@ -89,14 +92,14 @@ int main(void)
             relay2 = 0;
         }
 
-        /******** 3. 系统状态发送给屏 ********/
+        /******** 3. Sync system state to screen ********/
         if(system_ok != last_system_ok)
         {
             TJC_SetSystemState(system_ok);
             last_system_ok = system_ok;
         }
 
-        /******** 4. 系统正常后，判断产品合格/不合格 ********/
+        /******** 4. Judge product result when system is ready ********/
         if(system_ok == 1)
         {
             if(X1 == 0)
@@ -123,11 +126,29 @@ int main(void)
             product_result = 0;
         }
 
-        /******** 5. 产品结果发送给屏 ********/
+        /******** 5. Sync product result to screen ********/
         if(product_result != last_product_result)
         {
             TJC_SetProductResult(product_result);
             last_product_result = product_result;
+        }
+
+        /******** 6. Write pass/fail log once only ********/
+        if(product_result == 1 && log_written == 0)
+        {
+            TJC_AddDataLog(pressure_value, "锟较革拷");
+            log_written = 1;
+        }
+        else if(product_result == 2 && log_written == 0)
+        {
+            TJC_AddDataLog(pressure_value, "锟斤拷锟较革拷");
+            log_written = 1;
+        }
+
+        /******** 7. Reset log flag when result returns to idle ********/
+        if(product_result == 0)
+        {
+            log_written = 0;
         }
 
         Delay_ms(50);

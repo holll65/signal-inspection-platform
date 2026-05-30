@@ -38,4 +38,8 @@ void RS232_SendBuf(uint8_t *buf, uint16_t len);
 uint8_t RS232_ReadByte(uint8_t *ch);
 
 
+// 清空接收缓冲区
+void RS232_ClearRxBuffer(void);
+
+
 #endif
